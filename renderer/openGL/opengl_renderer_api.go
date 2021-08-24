@@ -34,9 +34,8 @@ func (renderer *GLRendererAPI) Clear() {
 }
 
 func (renderer *GLRendererAPI) DrawVa(va render_types.VertexArray) {
-	va.Bind()
 	gl.DrawElements(gl.TRIANGLES, va.GetIndexBuffer().GetCount(), gl.UNSIGNED_INT, gl.Ptr(nil))
-	va.UnBind()
+	gl.BindTexture(gl.TEXTURE_2D, 0)
 }
 
 func (renderer *GLRendererAPI) GetAPI() render_types.RenderPlatform {

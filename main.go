@@ -44,6 +44,8 @@ func OurInterface()  {
 	}
 	window.Close()
 	//fmt.Println(ds)
+
+	renderer.RenderCommand.Init()
 }
 
 func native() {

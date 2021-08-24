@@ -4,8 +4,8 @@ package render_types
 type RenderPlatform int
 
 //TODO move me away
-
 var CurrentPlatform RenderPlatform = OpenGL
+
 const (
 	None RenderPlatform = iota
 	OpenGL

@@ -98,12 +98,15 @@ func (s *GLShader) SetUniform(name string, uType render_types.ShaderDataType, da
 	case render_types.Int4:
 		td := data.(*int32)
 		gl.Uniform4iv(uniformLoc, 1, td)
-	//case renderer.Mat2:
-	//	gl.Uniform
-	//case renderer.Mat3:
-	//	gl.Uniform
-	//case renderer.Mat4:
-	//	gl.Uniform
+	case render_types.Mat2:
+		td := data.(*float32)
+		gl.UniformMatrix2fv(uniformLoc, 1, false, td)
+	case render_types.Mat3:
+		td := data.(*float32)
+		gl.UniformMatrix3fv(uniformLoc, 1, false, td)
+	case render_types.Mat4:
+		td := data.(*float32)
+		gl.UniformMatrix4fv(uniformLoc, 1, false, td)
 	}
 }
 
