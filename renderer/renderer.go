@@ -41,7 +41,7 @@ func (r *renderer) Submit(shader render_types.Shader, va render_types.VertexArra
 	shader.Bind()
 	//TODO Fix those in gl shader
 	shader.SetUniform("u_ViewProjection", render_types.Mat4, &r.scene.viewProjectionMatrix[0])
-	shader.SetUniform("u_Transform", render_types.Mat4, transform)
+	shader.SetUniform("u_Transform", render_types.Mat4, &transform[0])
 
 	va.Bind()
 	RenderCommand.DrawIndexed(va)

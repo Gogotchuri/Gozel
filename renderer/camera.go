@@ -1,6 +1,7 @@
 package renderer
 
 import (
+	"fmt"
 	math32 "github.com/go-gl/mathgl/mgl32"
 )
 
@@ -54,6 +55,18 @@ func (oc OrthographicCamera) GetPosition() math32.Vec3 {
 	return oc.cameraPosition
 }
 
+func (oc *OrthographicCamera) Move(dx, dy, dz float32) {
+	oc.cameraPosition[0] += dx
+	oc.cameraPosition[1] += dy
+	oc.cameraPosition[2] += dz
+	oc.calculateViewMatrix()
+}
+
+func (oc *OrthographicCamera) Rotate(dDegrees float32) {
+	oc.rotation += dDegrees
+	oc.calculateViewMatrix()
+}
+
 //Angles
 func (oc *OrthographicCamera) SetRotation(a float32) {
 	oc.rotation = a
@@ -85,8 +98,8 @@ func (oc OrthographicCamera) GetViewMatrix() math32.Mat4 {
 func (oc OrthographicCamera) GetProjectionMatrix() math32.Mat4 {
 	return oc.projectionMatrix
 }
-func (oc OrthographicCamera) GetViewProjectionMatrix() math32.Mat4 {
-	return oc.viewProjectionMatrix
+func (oc OrthographicCamera) GetViewProjectionMatrix() *math32.Mat4 {
+	return &oc.viewProjectionMatrix
 }
 
 func (oc *OrthographicCamera) calculateViewMatrix() {
@@ -99,4 +112,5 @@ func (oc *OrthographicCamera) calculateViewMatrix() {
 
 	oc.viewMatrix = IM.Inv()
 	oc.viewProjectionMatrix = oc.projectionMatrix.Mul4(oc.viewMatrix)
+	fmt.Println(oc.viewMatrix)
 }

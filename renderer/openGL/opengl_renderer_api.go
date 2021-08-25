@@ -14,6 +14,10 @@ func CreateGLRendererAPI() *GLRendererAPI {
 }
 
 func (renderer *GLRendererAPI) Init() {
+	err := gl.Init()
+	if err != nil {
+		panic(err)
+	}
 	gl.Enable(gl.BLEND)
 	gl.BlendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA)
 	gl.Enable(gl.DEPTH_TEST)
@@ -34,6 +38,7 @@ func (renderer *GLRendererAPI) Clear() {
 }
 
 func (renderer *GLRendererAPI) DrawVa(va render_types.VertexArray) {
+	va.Bind()
 	gl.DrawElements(gl.TRIANGLES, va.GetIndexBuffer().GetCount(), gl.UNSIGNED_INT, gl.Ptr(nil))
 	gl.BindTexture(gl.TEXTURE_2D, 0)
 }

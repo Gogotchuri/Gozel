@@ -12,6 +12,7 @@ var _ render_types.Shader = &GLShader{}
 type GLShader struct {
 	Name, VertexSrc, FragmentSrc string
 	GLProgramID uint32
+	UniformLocations map[string]int32
 }
 
 func CreateGLShader(name, vertexSrc, fragmentSrc string) (*GLShader, error) {
@@ -48,6 +49,7 @@ func CreateGLShader(name, vertexSrc, fragmentSrc string) (*GLShader, error) {
 		VertexSrc:   vertexSrc,
 		FragmentSrc: fragmentSrc,
 		GLProgramID: programID,
+		UniformLocations: map[string]int32{},
 	}, nil
 }
 
@@ -72,7 +74,12 @@ func (s *GLShader) GetName() string {
 }
 
 func (s *GLShader) SetUniform(name string, uType render_types.ShaderDataType, data interface{}) {
-	uniformLoc := gl.GetUniformLocation(s.GLProgramID, gl.Str(name))
+	uniformLoc, found := s.UniformLocations[name]
+	if !found {
+		uniformLoc := gl.GetUniformLocation(s.GLProgramID, gl.Str(name+"\x00"))
+		s.UniformLocations[name] = uniformLoc
+	}
+	fmt.Println("uniform location", name, uniformLoc)
 	switch uType {
 	case render_types.Float1:
 		td := data.(float32)

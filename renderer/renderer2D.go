@@ -5,7 +5,6 @@ import (
 	"Gozel/renderer/render_types"
 	"Gozel/renderer/shaders"
 	"fmt"
-	"github.com/go-gl/gl/all-core/gl"
 	math32 "github.com/go-gl/mathgl/mgl32"
 )
 
@@ -17,6 +16,7 @@ type renderer2D struct {
 var Renderer2D = renderer2D{}
 
 func (r *renderer2D) Init() {
+	RenderCommand.Init()
 	var err error
 	r.ColorShader, err = CreateShader("ColorShader", shaders.ColorVertexShaderSrc, shaders.ColorFragmentShaderSrc)
 	if err != nil {
@@ -48,22 +48,22 @@ func (r *renderer2D) Init() {
 
 	ib := CreateIndexBuffer(indices, 6, opengl.StaticDraw)
 
-	va := CreateVertexArray()
-	va.AddVertexBuffer(vb)
-	va.SetIndexBuffer(ib)
-	va.UnBind()
+	r.VertexArray = CreateVertexArray()
+	r.VertexArray.AddVertexBuffer(vb)
+	r.VertexArray.SetIndexBuffer(ib)
+	r.VertexArray.UnBind()
 
-	RenderCommand.Init()
+
 }
 
 func (r *renderer2D) StartScene(camera OrthographicCamera) {
 	viewProj := camera.GetViewProjectionMatrix()
 
 	r.ColorShader.Bind()
-	r.ColorShader.SetUniform("u_view_projection", render_types.Mat4, gl.Ptr(viewProj))
+	r.ColorShader.SetUniform("u_view_projection", render_types.Mat4, &(*viewProj)[0])
 
 	r.TextureShader.Bind()
-	r.TextureShader.SetUniform("u_view_projection", render_types.Mat4, gl.Ptr(viewProj))
+	r.TextureShader.SetUniform("u_view_projection", render_types.Mat4, &(*viewProj)[0])
 }
 
 func (r *renderer2D) EndScene() {}
@@ -74,10 +74,12 @@ func (r *renderer2D) DrawRect(position math32.Vec3, size math32.Vec2, color math
 	model := math32.Ident4()
 	model = model.Mul4(math32.Translate3D(position[0], position[1], position[2]))
 	model = model.Mul4(math32.Scale3D(size[0], size[1], 1.0))
-	model = model.Mul4(math32.HomogRotate3D(rotationAngle, rotationAxis))
+	if rotationAngle != 0 {
+		model = model.Mul4(math32.HomogRotate3D(math32.DegToRad(rotationAngle), rotationAxis))
+	}
 
-	r.ColorShader.SetUniform("u_model", render_types.Mat4, gl.Ptr(model))
-	r.ColorShader.SetUniform("u_color", render_types.Float3, gl.Ptr(color))
+	r.ColorShader.SetUniform("u_model", render_types.Mat4, &model[0])
+	r.ColorShader.SetUniform("u_color", render_types.Float3, &color[0])
 
 	RenderCommand.DrawIndexed(r.VertexArray)
 }

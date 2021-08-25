@@ -12,6 +12,7 @@ var RenderCommand = &renderCommand{rendererAPI: nil}
 
 func (rc *renderCommand) Init() {
 	rc.rendererAPI = CreateRendererAPI()
+	rc.rendererAPI.Init()
 }
 
 func (rc *renderCommand) SetViewport(x, y, width, height int32) {

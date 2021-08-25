@@ -12,7 +12,7 @@ const ColorVertexShaderSrc = `
 	{
 		gl_Position = u_view_projection * u_model * vec4(aPos.x, aPos.y, aPos.z, 1.0);
 	}
-`
+`+ "\x00"
 
 const ColorFragmentShaderSrc = `
 	#version 330 core
@@ -25,7 +25,7 @@ const ColorFragmentShaderSrc = `
 	{
 		color = vec4(u_color.x, u_color.y, u_color.z, 1.0f);
 	}
-`
+`+ "\x00"
 
 const TextureVertexShaderSrc = `
 	#version 330 core
@@ -43,7 +43,7 @@ const TextureVertexShaderSrc = `
 		gl_Position = u_view_projection * u_model * vec4(a_pos, 1.0);
 		outTexCords = a_texCord;
 	}
-`
+` + "\x00"
 
 const TextureFragmentShaderSrc = `
 	#version 330 core
@@ -59,4 +59,4 @@ const TextureFragmentShaderSrc = `
 		vec4 fragColor = texture(u_texture, outTexCords);
 		color = fragColor;
 	}
-`
+`+ "\x00"

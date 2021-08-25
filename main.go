@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/go-gl/gl/all-core/gl"
 	"github.com/go-gl/glfw/v3.3/glfw"
+	math32 "github.com/go-gl/mathgl/mgl32"
 	"time"
 )
 
@@ -26,12 +27,42 @@ func HelloSquare() {
 		panic(err)
 	}
 	renderer.Renderer2D.Init()
-	//oCamera := renderer.CreateOrthographicCamera(0, 700, 0, 450)
+	oCamera := renderer.CreateOrthographicCamera(0, 600, 0, 800)
+	oCamera.SetPosition(math32.Vec3{100, 100, 0})
+	var dx, dy, dz, rotation float32 = 300, 400, 0, 0
 	for window.IsOpen() {
-		//renderer.RenderCommand.SetClearColor(0.2, 0.3, 0.3, 1.0)
-		//renderer.RenderCommand.Clear()
+		start := time.Now()
+		renderer.RenderCommand.SetClearColor(0.2, 0.3, 0.3, 1.0)
+		renderer.RenderCommand.Clear()
+
+		//var dx, dy, dz, rotation float32
+		if window.GetBaseWindow().(*glfw.Window).GetKey(glfw.KeyLeft) == glfw.Press {
+			fmt.Println("left pressed")
+			dx += 0.1
+		}
+		if window.GetBaseWindow().(*glfw.Window).GetKey(glfw.KeyRight) == glfw.Press{
+			dx -= 0.1
+		}
+		if window.GetBaseWindow().(*glfw.Window).GetKey(glfw.KeyUp) == glfw.Press {
+			dy += 0.1
+		}
+		if window.GetBaseWindow().(*glfw.Window).GetKey(glfw.KeyDown) == glfw.Press {
+			dy -= 0.1
+		}
+		if window.GetBaseWindow().(*glfw.Window).GetKey(glfw.KeySpace) == glfw.Press {
+			rotation = 45
+		}
+		//oCamera.Move(dx, dy, dz)
+		//fmt.Println(oCamera.GetPosition())
+		//oCamera.Rotate(rotation)
+		fmt.Println(dx, dy, dz)
+		renderer.Renderer2D.StartScene(oCamera)
+		renderer.Renderer2D.DrawRect(math32.Vec3{dx, dy, dz}, math32.Vec2{150, 150}, math32.Vec3{1, 0.5, 0.5}, math32.Vec3{0,0,1}, rotation)
+		renderer.Renderer2D.EndScene()
+
 		window.OnUpdate()
 		glfw.PollEvents()
+		fmt.Println(time.Since(start).Milliseconds())
 	}
 }
 
