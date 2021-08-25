@@ -8,14 +8,14 @@ import (
 var _ render_types.VertexArray = &GLVertexArray{}
 
 type GLVertexArray struct {
-	vertexArrayID uint32
+	vertexArrayID     uint32
 	vertexBufferIndex uint32
 
 	vertexBuffers []render_types.VertexBuffer
-	indexBuffer render_types.IndexBuffer
+	indexBuffer   render_types.IndexBuffer
 }
 
-func CreateGLVertexArray() (*GLVertexArray, error) {
+func CreateGLVertexArray() *GLVertexArray {
 	vaoID := uint32(0)
 	gl.GenVertexArrays(1, &vaoID)
 	return &GLVertexArray{
@@ -23,7 +23,7 @@ func CreateGLVertexArray() (*GLVertexArray, error) {
 		vertexBufferIndex: 0,
 		vertexBuffers:     []render_types.VertexBuffer{},
 		indexBuffer:       nil,
-	}, nil
+	}
 }
 
 func (va *GLVertexArray) AddVertexBuffer(vb render_types.VertexBuffer) {
@@ -73,17 +73,28 @@ func (va *GLVertexArray) Destroy() {
 
 func getGLBaseType(dataType render_types.ShaderDataType) uint32 {
 	switch dataType {
-		case render_types.Float1:   return gl.FLOAT
-		case render_types.Float2:   return gl.FLOAT
-		case render_types.Float3:   return gl.FLOAT
-		case render_types.Float4:   return gl.FLOAT
-		case render_types.Int1:     return gl.INT
-		case render_types.Int2:     return gl.INT
-		case render_types.Int3:     return gl.INT
-		case render_types.Int4:     return gl.INT
-		case render_types.Mat2:     return gl.FLOAT
-		case render_types.Mat3:     return gl.FLOAT
-		case render_types.Mat4:     return gl.FLOAT
+	case render_types.Float1:
+		return gl.FLOAT
+	case render_types.Float2:
+		return gl.FLOAT
+	case render_types.Float3:
+		return gl.FLOAT
+	case render_types.Float4:
+		return gl.FLOAT
+	case render_types.Int1:
+		return gl.INT
+	case render_types.Int2:
+		return gl.INT
+	case render_types.Int3:
+		return gl.INT
+	case render_types.Int4:
+		return gl.INT
+	case render_types.Mat2:
+		return gl.FLOAT
+	case render_types.Mat3:
+		return gl.FLOAT
+	case render_types.Mat4:
+		return gl.FLOAT
 	}
 	panic("Gl Type undefined")
 }

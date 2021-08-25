@@ -24,7 +24,14 @@ type VertexBufferLayout struct {
 	elements []LayoutElement
 }
 
-func (vbl *VertexBufferLayout) Push(le LayoutElement)  {
+func CreateVertexBufferLayout() VertexBufferLayout {
+	return VertexBufferLayout{
+		stride:   0,
+		elements: []LayoutElement{},
+	}
+}
+
+func (vbl *VertexBufferLayout) Push(le LayoutElement) {
 	le.Offset = vbl.stride
 	vbl.elements = append(vbl.elements, le)
 	vbl.stride += le.Size

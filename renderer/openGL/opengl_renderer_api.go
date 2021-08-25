@@ -7,10 +7,10 @@ import (
 
 var _ render_types.RendererAPI = &GLRendererAPI{}
 
-type GLRendererAPI struct {}
+type GLRendererAPI struct{}
 
-func CreateGLRendererAPI() (*GLRendererAPI, error) {
-	return &GLRendererAPI{}, nil
+func CreateGLRendererAPI() *GLRendererAPI {
+	return &GLRendererAPI{}
 }
 
 func (renderer *GLRendererAPI) Init() {

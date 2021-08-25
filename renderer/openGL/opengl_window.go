@@ -5,15 +5,14 @@ import (
 	"fmt"
 	"github.com/go-gl/gl/all-core/gl"
 	"github.com/go-gl/glfw/v3.3/glfw"
-	"time"
 )
 
 var _ render_types.Window = &GLWindow{}
 
 type GLWindow struct {
 	GLFWWindow *glfw.Window
-	Context render_types.GraphicsContext
-	vsync bool
+	Context    render_types.GraphicsContext
+	vsync      bool
 }
 
 func CreateGLWindow(width, height int, title string) (*GLWindow, error) {
@@ -27,7 +26,7 @@ func CreateGLWindow(width, height int, title string) (*GLWindow, error) {
 	glfw.WindowHint(glfw.OpenGLProfile, glfw.OpenGLCoreProfile)
 
 	/* Create a windowed mode window and its OpenGL context */
-	window, err := glfw.CreateWindow(width, height, title, nil, nil);
+	window, err := glfw.CreateWindow(width, height, title, nil, nil)
 	if err != nil {
 		glfw.Terminate()
 		return nil, fmt.Errorf("GLFW window initialization failed")
@@ -58,9 +57,7 @@ func (w *GLWindow) Close() {
 }
 
 func (w *GLWindow) OnUpdate() {
-	now := time.Now()
 	w.Context.SwapBuffers()
-	fmt.Println("window OnUpdate time", time.Since(now))
 }
 
 func (w *GLWindow) GetBaseWindow() interface{} {

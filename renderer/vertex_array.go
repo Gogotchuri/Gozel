@@ -6,12 +6,15 @@ import (
 	"fmt"
 )
 
-func CreateVertexArray() (render_types.VertexArray, error) {
+func CreateVertexArray() render_types.VertexArray {
 	switch render_types.CurrentPlatform {
 	case render_types.None:
-		return nil, fmt.Errorf("platform none")
+		fmt.Println("platform none")
+		return nil //TODO null safety?
+
 	case render_types.OpenGL:
 		return opengl.CreateGLVertexArray()
 	}
-	return nil, fmt.Errorf("platform is undefined")
+	fmt.Println("platform is undefined")
+	return nil
 }

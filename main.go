@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"github.com/go-gl/gl/all-core/gl"
 	"github.com/go-gl/glfw/v3.3/glfw"
-	"runtime"
 	"time"
 )
 
@@ -15,19 +14,28 @@ import (
 // 	runtime.LockOSThread()
 // }
 
-func ballast(size int) func() {
-	blst := make([]byte, size)
-	return func() {
-		runtime.KeepAlive(blst)
-	}
-}
-
 func main() {
-	OurInterface()
+	HelloSquare()
+	//OurInterface()
 	//native()
 }
 
-func OurInterface()  {
+func HelloSquare() {
+	window, err := renderer.CreateWindow(600, 800, "WW")
+	if err != nil {
+		panic(err)
+	}
+	renderer.Renderer2D.Init()
+	//oCamera := renderer.CreateOrthographicCamera(0, 700, 0, 450)
+	for window.IsOpen() {
+		//renderer.RenderCommand.SetClearColor(0.2, 0.3, 0.3, 1.0)
+		//renderer.RenderCommand.Clear()
+		window.OnUpdate()
+		glfw.PollEvents()
+	}
+}
+
+func OurInterface() {
 	window, err := renderer.CreateWindow(600, 800, "WW")
 	if err != nil {
 		panic(err)
@@ -40,7 +48,7 @@ func OurInterface()  {
 		window.OnUpdate()
 		glfw.PollEvents()
 		//*ds = append(*ds, time.Since(s))
-		fmt.Println(time.Since(s))
+		fmt.Println("--", time.Since(s).String())
 	}
 	window.Close()
 	//fmt.Println(ds)

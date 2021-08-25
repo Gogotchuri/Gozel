@@ -11,11 +11,7 @@ type renderCommand struct {
 var RenderCommand = &renderCommand{rendererAPI: nil}
 
 func (rc *renderCommand) Init() {
-	var err error
-	rc.rendererAPI, err = CreateRendererAPI()
-	if err != nil {
-		panic(err)
-	}
+	rc.rendererAPI = CreateRendererAPI()
 }
 
 func (rc *renderCommand) SetViewport(x, y, width, height int32) {

@@ -7,13 +7,15 @@ import (
 	//math "github.com/go-gl/mathgl/mgl32"
 )
 
-func CreateRendererAPI() (render_types.RendererAPI, error){
+func CreateRendererAPI() render_types.RendererAPI {
 	switch render_types.CurrentPlatform {
 	case render_types.None:
-		return nil, fmt.Errorf("platform none")
+		fmt.Println("platform none")
+		return nil
 	case render_types.OpenGL:
 		return opengl.CreateGLRendererAPI()
 	}
-	return nil, fmt.Errorf("platform is undefined")
+	fmt.Println("platform undefined")
+	return nil
 
 }
