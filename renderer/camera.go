@@ -42,6 +42,7 @@ func CreateOrthographicCamera(left, right, bottom, top float32) OrthographicCame
 		rotation: 0,
 		zoom:     0,
 	}
+
 }
 
 func (oc *OrthographicCamera) SetPosition(position math32.Vec3) {
