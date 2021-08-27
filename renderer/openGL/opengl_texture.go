@@ -3,7 +3,7 @@ package opengl
 import (
 	"Gozel/renderer/render_types"
 	"fmt"
-	"github.com/go-gl/gl/all-core/gl"
+	"github.com/go-gl/gl/v4.6-core/gl"
 	"image"
 	"image/draw"
 	"os"

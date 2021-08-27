@@ -3,7 +3,7 @@ package main
 import (
 	"Gozel/renderer"
 	"fmt"
-	"github.com/go-gl/gl/all-core/gl"
+	"github.com/go-gl/gl/v4.6-core/gl"
 	"github.com/go-gl/glfw/v3.3/glfw"
 	math32 "github.com/go-gl/mathgl/mgl32"
 	"time"
@@ -26,6 +26,7 @@ func HelloSquare() {
 	if err != nil {
 		panic(err)
 	}
+	window.SetVSync(true)
 	renderer.Renderer2D.Init()
 	oCamera := renderer.CreateOrthographicCamera(0, 600, 0, 800)
 	oCamera.SetPosition(math32.Vec3{100, 100, 0})
@@ -37,17 +38,16 @@ func HelloSquare() {
 
 		//var dx, dy, dz, rotation float32
 		if window.GetBaseWindow().(*glfw.Window).GetKey(glfw.KeyLeft) == glfw.Press {
-			fmt.Println("left pressed")
-			dx += 0.1
+			dx += 10
 		}
 		if window.GetBaseWindow().(*glfw.Window).GetKey(glfw.KeyRight) == glfw.Press{
-			dx -= 0.1
+			dx -= 10
 		}
 		if window.GetBaseWindow().(*glfw.Window).GetKey(glfw.KeyUp) == glfw.Press {
-			dy += 0.1
+			dy += 10
 		}
 		if window.GetBaseWindow().(*glfw.Window).GetKey(glfw.KeyDown) == glfw.Press {
-			dy -= 0.1
+			dy -= 10
 		}
 		if window.GetBaseWindow().(*glfw.Window).GetKey(glfw.KeySpace) == glfw.Press {
 			rotation = 45

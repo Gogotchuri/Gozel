@@ -1,6 +1,6 @@
 package render_types
 
-import "github.com/go-gl/gl/all-core/gl"
+import 	"github.com/go-gl/gl/v4.6-core/gl"
 
 type ShaderDataType int
 type ShaderType int32

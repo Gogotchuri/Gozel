@@ -70,7 +70,6 @@ func (r *renderer2D) EndScene() {}
 
 func (r *renderer2D) DrawRect(position math32.Vec3, size math32.Vec2, color math32.Vec3,
 	rotationAxis math32.Vec3, rotationAngle float32) {
-	r.ColorShader.Bind()
 	model := math32.Ident4()
 	model = model.Mul4(math32.Translate3D(position[0], position[1], position[2]))
 	model = model.Mul4(math32.Scale3D(size[0], size[1], 1.0))
@@ -78,6 +77,7 @@ func (r *renderer2D) DrawRect(position math32.Vec3, size math32.Vec2, color math
 		model = model.Mul4(math32.HomogRotate3D(math32.DegToRad(rotationAngle), rotationAxis))
 	}
 
+	r.ColorShader.Bind()
 	r.ColorShader.SetUniform("u_model", render_types.Mat4, &model[0])
 	r.ColorShader.SetUniform("u_color", render_types.Float3, &color[0])
 

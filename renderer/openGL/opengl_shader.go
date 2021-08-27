@@ -3,7 +3,7 @@ package opengl
 import (
 	"Gozel/renderer/render_types"
 	"fmt"
-	"github.com/go-gl/gl/all-core/gl"
+	"github.com/go-gl/gl/v4.6-core/gl"
 	"strings"
 )
 
@@ -16,6 +16,8 @@ type GLShader struct {
 }
 
 func CreateGLShader(name, vertexSrc, fragmentSrc string) (*GLShader, error) {
+	fmt.Println("Creating program")
+	var status int32
 	programID := gl.CreateProgram()
 
 	vertexShaderID, err := compileShader(render_types.VertexShader, vertexSrc)
@@ -31,7 +33,8 @@ func CreateGLShader(name, vertexSrc, fragmentSrc string) (*GLShader, error) {
 	gl.AttachShader(programID, fragmentShaderID)
 	gl.LinkProgram(programID)
 
-	var status int32
+	gl.ValidateProgram(programID)
+
 	gl.GetProgramiv(programID, gl.LINK_STATUS, &status)
 	if status == gl.FALSE {
 		gl.GetProgramiv(programID, gl.INFO_LOG_LENGTH, &status)
@@ -58,11 +61,20 @@ func CreateGLShaderFromFile(f string) (*GLShader, error) {
 }
 
 func (s *GLShader) Bind() {
+	//err := gl.GetError()
+	//if err != 0 {
+	//	panic(err)
+	//} else {
+	//	fmt.Println("WOOOW")
+	//}
 	gl.UseProgram(s.GLProgramID)
+
+
 }
 
 func (s *GLShader) UnBind() {
 	gl.UseProgram(0)
+
 }
 
 func (s *GLShader) GetID() uint32 {
@@ -74,12 +86,20 @@ func (s *GLShader) GetName() string {
 }
 
 func (s *GLShader) SetUniform(name string, uType render_types.ShaderDataType, data interface{}) {
-	uniformLoc, found := s.UniformLocations[name]
-	if !found {
-		uniformLoc := gl.GetUniformLocation(s.GLProgramID, gl.Str(name+"\x00"))
-		s.UniformLocations[name] = uniformLoc
-	}
+	//uniformLoc, found := s.UniformLocations[name]
+	//if !found {
+	//	uniformLoc := gl.GetUniformLocation(s.GLProgramID, gl.Str(name+"\x00"))
+	//	s.UniformLocations[name] = uniformLoc
+	//}
+	uniformLoc := gl.GetUniformLocation(s.GLProgramID, gl.Str(name+"\x00"))
+
 	fmt.Println("uniform location", name, uniformLoc)
+	err := gl.GetError()
+	if err != 0 {
+		panic(err)
+	} else {
+		fmt.Println("WOOOW")
+	}
 	switch uType {
 	case render_types.Float1:
 		td := data.(float32)
@@ -122,6 +142,8 @@ func (s *GLShader) Destroy() {
 }
 
 func compileShader(shaderType render_types.ShaderType, src string) (uint32, error) {
+	var status int32
+
 	shaderID := gl.CreateShader(uint32(shaderType))
 	cSrc, free := gl.Strs(src)
 
@@ -129,7 +151,6 @@ func compileShader(shaderType render_types.ShaderType, src string) (uint32, erro
 	free()
 	gl.CompileShader(shaderID)
 
-	var status int32
 	gl.GetShaderiv(shaderID, gl.COMPILE_STATUS, &status)
 	if status == gl.FALSE {
 		gl.GetShaderiv(shaderID, gl.INFO_LOG_LENGTH, &status)
